@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="title_movie">Movie</string>
+    <string name="title_tv_show">TV Show</string>
+    <string name="image_description">Image Description</string>
+    <string name="overview">Overview</string>
+    <string name="vote_average">Vote Average</string>
+    <string name="popularity">Popularity</string>
+    <string name="release_date">Release Date</string>
+    <string name="movies_detail_header">Movie Detail</string>
+    <string name="tv_show_detail_header">TV Show Detail</string>
+    <string name="change_language_settings">Change Language Settings</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="favorite_tv_notif_no">There are currently no data on TV Show favorites</string>
+    <string name="favorite_movie_notif_no">There are currently no data on Movie favorites</string>
+    <string name="favorite_notif_del_ok">Favorite successfully deleted</string>
+    <string name="favorite_notif_del_no">Favorite failed to delete</string>
+    <string name="favorite_notif_add_ok">Favorite successfully added</string>
+    <string name="favorite_notif_add_no">Favorite failed to add</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Input words</string>
+    <string name="appwidget_text">MovieCatalogue Favorite Poster</string>
+    <string name="empty_text">No Data</string>
+    <string name="reminder_setting">Reminder Setting</string>
+    <string name="release_reminder">Release Reminder</string>
+    <string name="release_desc">Reminder showing the movie that release today</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="daily_desc">Reminder for return to app</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="title_movie">Film</string>
+    <string name="title_tv_show">Acara TV</string>
+    <string name="image_description">Deskripsi Gambar</string>
+    <string name="overview">Ikhtisar</string>
+    <string name="vote_average">Rata-rata vote</string>
+    <string name="popularity">Popularitas</string>
+    <string name="release_date">Tanggal Rilis</string>
+    <string name="movies_detail_header">Detail Film</string>
+    <string name="tv_show_detail_header">Detail Acara TV</string>
+    <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
+    <string name="title_favorite">Favorit</string>
+    <string name="favorite_tv_notif_no">Tidak ada data favorite TV Show saat ini</string>
+    <string name="favorite_movie_notif_no">Tidak ada data favorite Film saat ini</string>
+    <string name="favorite_notif_del_ok">Favorite berhasil dihapus</string>
+    <string name="favorite_notif_del_no">Favorite gagal dihapus</string>
+    <string name="favorite_notif_add_ok">Favorite berhasil ditambahkan</string>
+    <string name="favorite_notif_add_no">Favorite gagal ditambahkan</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Masukan kata pencarian</string>
+    <string name="appwidget_text">MovieCatalogue Poster Favorit</string>
+    <string name="empty_text">Tidak Ada Data</string>
+    <string name="reminder_setting">Reminder Setting</string>
+    <string name="release_reminder">Release Reminder</string>
+    <string name="release_desc">Reminder showing the movie that release today</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="daily_desc">Reminder for return to app</string>
+</resources>
