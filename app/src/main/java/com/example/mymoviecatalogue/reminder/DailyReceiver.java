@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.mymoviecatalogue.MainActivity;
 import com.example.mymoviecatalogue.R;
 
 import java.text.DateFormat;
@@ -45,7 +46,7 @@ public class DailyReceiver extends BroadcastReceiver {
     private void showAlarmNotification(Context context, String title, String message, int notifId) {
         String CHANNEL_ID = "Channel_1";
         String CHANNEL_NAME = "AlarmManager channel";
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dicoding.com"));
+        Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -88,7 +89,7 @@ public class DailyReceiver extends BroadcastReceiver {
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
-        Toast.makeText(context, "Repeating alarm set up", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.daily_reminder_set, Toast.LENGTH_SHORT).show();
     }
 
     public boolean isDateInvalid(String date, String format) {
@@ -111,7 +112,7 @@ public class DailyReceiver extends BroadcastReceiver {
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
         }
-        Toast.makeText(context, "Repeating alarm dibatalkan", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.daily_reminder_unset, Toast.LENGTH_SHORT).show();
     }
 
 }

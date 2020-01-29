@@ -26,4 +26,8 @@
     <string name="release_desc">Reminder showing the movie that release today</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="daily_desc">Reminder for return to app</string>
+    <string name="daily_reminder_set">Daily Reminder set up</string>
+    <string name="daily_reminder_unset">Daily Reminder unset</string>
+    <string name="key_daily">daily</string>
+    <string name="key_release">release</string>
 </resources>

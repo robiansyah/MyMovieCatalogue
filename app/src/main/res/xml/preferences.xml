@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="@string/key_release"
+        android:summaryOff="Switch off"
+        android:summaryOn="Switch on"
+        android:title="Switch Preference" />
+
+    <SwitchPreference
+        android:key="@string/key_daily"
+        android:summaryOff="Switch off"
+        android:summaryOn="Switch on"
+        android:title="Switch Preference" />
+</PreferenceScreen>
