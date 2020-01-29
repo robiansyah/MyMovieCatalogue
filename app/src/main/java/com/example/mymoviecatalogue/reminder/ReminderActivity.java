@@ -20,35 +20,7 @@ public class ReminderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.reference, new MyPreferenceFragment()).commit();
-
-//        releaseSwitch = findViewById(R.id.switch_release);
-//        dailySwitch = findViewById(R.id.switch_daily);
-//
-//        dailyReceiver = new DailyReceiver();
-//
-//        releaseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    Toast.makeText(ReminderActivity.this, "Release Checked", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(ReminderActivity.this, "Release Unchecked", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//
-//        dailySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    String repeatTime = "17:42";
-//                    String repeatMessage = "Catalogue Movie missing you";
-//                    dailyReceiver.setRepeatingAlarm(ReminderActivity.this,
-//                            repeatTime, repeatMessage);
-//                } else {
-//                    dailyReceiver.cancelAlarm(ReminderActivity.this);
-//                }
-//            }
-//        });
+        getSupportFragmentManager().beginTransaction().add(R.id.preference, new MyPreferenceFragment()).commit();
 
     }
 }

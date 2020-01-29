@@ -30,4 +30,7 @@
     <string name="daily_reminder_unset">Daily Reminder unset</string>
     <string name="key_daily">daily</string>
     <string name="key_release">release</string>
+    <string name="release_reminder_set">Release Reminder Set</string>
+    <string name="release_reminder_unset">Release Reminder Unset</string>
+    <string name="release_today">has been release today</string>
 </resources>
