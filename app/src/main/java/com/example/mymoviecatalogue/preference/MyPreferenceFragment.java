@@ -2,16 +2,13 @@ package com.example.mymoviecatalogue.preference;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.example.mymoviecatalogue.R;
 import com.example.mymoviecatalogue.reminder.DailyReceiver;
 import com.example.mymoviecatalogue.reminder.ReleaseReceiver;
-import com.example.mymoviecatalogue.reminder.ReminderActivity;
 
 public class MyPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private String DAILY;
@@ -33,20 +30,20 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat implements Sh
     }
 
     private void init() {
-        DAILY = getResources().getString(R.string.key_daily);
         RELEASE = getResources().getString(R.string.key_release);
+        DAILY = getResources().getString(R.string.key_daily);
 
-        dailyPreference = findPreference(DAILY);
         releasePreference = findPreference(RELEASE);
+        dailyPreference = findPreference(DAILY);
 
-        dailyReceiver = new DailyReceiver();
         releaseReceiver = new ReleaseReceiver();
+        dailyReceiver = new DailyReceiver();
     }
 
     private void setSummaries() {
         SharedPreferences sh = getPreferenceManager().getSharedPreferences();
-        dailyPreference.setChecked(sh.getBoolean(DAILY, false));
         releasePreference.setChecked(sh.getBoolean(RELEASE, false));
+        dailyPreference.setChecked(sh.getBoolean(DAILY, false));
     }
 
     @Override
@@ -62,17 +59,6 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat implements Sh
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(DAILY)) {
-            boolean isChecked = sharedPreferences.getBoolean(DAILY, false);
-            dailyPreference.setChecked(isChecked);
-            if(isChecked==true){
-                String repeatMessage = "Catalogue Movie missing you";
-                dailyReceiver.setRepeatingAlarm(getActivity(), repeatMessage);
-            }else{
-                dailyReceiver.cancelAlarm(getActivity());
-            }
-        }
-
         if (key.equals(RELEASE)) {
             boolean isChecked = sharedPreferences.getBoolean(RELEASE, false);
             releasePreference.setChecked(isChecked);
@@ -80,6 +66,16 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat implements Sh
                 releaseReceiver.setRepeatingAlarm(getActivity());
             }else{
                 releaseReceiver.cancelAlarm(getActivity());
+            }
+        }
+
+        if (key.equals(DAILY)) {
+            boolean isChecked = sharedPreferences.getBoolean(DAILY, false);
+            dailyPreference.setChecked(isChecked);
+            if(isChecked==true){
+                dailyReceiver.setRepeatingAlarm(getActivity());
+            }else{
+                dailyReceiver.cancelAlarm(getActivity());
             }
         }
     }

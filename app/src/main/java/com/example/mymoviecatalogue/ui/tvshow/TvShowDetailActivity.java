@@ -2,7 +2,6 @@ package com.example.mymoviecatalogue.ui.tvshow;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -102,7 +101,7 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void add_fav(){
-        Cursor cursor = tvHelper.queryById(idApi);
+        Cursor cursor = tvHelper.queryById(String.valueOf(idApi));
         try {
             if (cursor.moveToFirst()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.TvColumns._ID));

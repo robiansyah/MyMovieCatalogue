@@ -1,8 +1,9 @@
 package com.example.mymoviecatalogue.ui.movie;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.mymoviecatalogue.R;
 import com.example.mymoviecatalogue.db.DatabaseContract;
 import com.example.mymoviecatalogue.db.MovieHelper;
+import com.example.mymoviecatalogue.widget.ImageFavoriteWidget;
 
 import static com.example.mymoviecatalogue.db.DatabaseContract.MovieColumns.IDAPI;
 import static com.example.mymoviecatalogue.db.DatabaseContract.MovieColumns.TITLE;
@@ -112,6 +114,7 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(MovieDetailActivity.this, R.string.favorite_notif_del_ok, Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(MovieDetailActivity.this, R.string.favorite_notif_del_no, Toast.LENGTH_SHORT).show();
+                autoUpdateWidget();
             }else{
                 movie.setIdApi(idApi);
                 movie.setTitle(title);
@@ -134,6 +137,7 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(MovieDetailActivity.this, R.string.favorite_notif_add_ok, Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(MovieDetailActivity.this, R.string.favorite_notif_add_no, Toast.LENGTH_SHORT).show();
+                autoUpdateWidget();
             }
         } finally {
             cursor.close();
@@ -144,5 +148,12 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
 
+    }
+
+    private void autoUpdateWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        ComponentName thisWidget = new ComponentName(getApplicationContext(), ImageFavoriteWidget.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.stack_view);
     }
 }

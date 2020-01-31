@@ -33,4 +33,8 @@
     <string name="release_reminder_set">Release Reminder Set</string>
     <string name="release_reminder_unset">Release Reminder Unset</string>
     <string name="release_today">has been release today</string>
+    <string name="daily_reminder_message">Catalogue Movie missing you</string>
+    <string name="no_release">There is no movie release today</string>
+    <string name="movie_search_result">Movie Search Result</string>
+    <string name="tv_search_result">TV Show Search Result</string>
 </resources>

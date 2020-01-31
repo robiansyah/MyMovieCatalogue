@@ -2,13 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:key="@string/key_release"
-        android:summaryOff="@string/release_desc"
-        android:summaryOn="@string/release_desc"
+        android:summary="@string/release_desc"
         android:title="@string/release_reminder" />
 
     <SwitchPreference
         android:key="@string/key_daily"
-        android:summaryOff="@string/daily_desc"
-        android:summaryOn="@string/daily_desc"
+        android:summary="@string/daily_desc"
         android:title="@string/daily_reminder" />
 </PreferenceScreen>

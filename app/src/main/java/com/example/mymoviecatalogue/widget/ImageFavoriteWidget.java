@@ -18,6 +18,7 @@ public class ImageFavoriteWidget extends AppWidgetProvider {
 
     public static final String EXTRA_ITEM = "com.example.mymoviecatalogue.EXTRA_ITEM";
     private static final String TOAST_ACTION = "com.example.mymoviecatalogue.TOAST_ACTION";
+    private static final String TOAST_UPDATE = "com.example.mymoviecatalogue.TOAST_UPDATE";
 
     private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
@@ -35,7 +36,9 @@ public class ImageFavoriteWidget extends AppWidgetProvider {
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
-
+        updateWidgetFavorite(context);
+        Intent widgetUpdateIntent = new Intent(context, StackWidgetService.class);
+        context.startService(widgetUpdateIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -56,6 +59,12 @@ public class ImageFavoriteWidget extends AppWidgetProvider {
                 Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    static void updateWidgetFavorite(Context context) {
+        Intent updateIntent = new Intent(context, ImageFavoriteWidget.class);
+        updateIntent.setAction(TOAST_UPDATE);
+        context.sendBroadcast(updateIntent);
     }
 }
 

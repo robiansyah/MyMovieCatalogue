@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.mymoviecatalogue.R;
 import com.example.mymoviecatalogue.ui.favorite.movie.FavoriteMovieFragment;
 import com.example.mymoviecatalogue.ui.favorite.tvshow.FavoriteTvShowFragment;
+
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private final Context mContext;
     @StringRes
