@@ -14,7 +14,7 @@ public class MappingHelper {
 
         while (tvCursor.moveToNext()) {
             int id = tvCursor.getInt(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns._ID));
-            String idApi = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.IDAPI));
+            int idApi = tvCursor.getInt(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.IDAPI));
             String name = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.NAME));
             String overview = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.OVERVIEW));
             String poster = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.POSTERPATH));
@@ -30,7 +30,7 @@ public class MappingHelper {
     public static TvShowItems mapCursorToObject(Cursor tvCursor) {
         tvCursor.moveToFirst();
         int id = tvCursor.getInt(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns._ID));
-        String idApi = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.IDAPI));
+        int idApi = tvCursor.getInt(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.IDAPI));
         String name = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.NAME));
         String overview = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.OVERVIEW));
         String poster = tvCursor.getString(tvCursor.getColumnIndexOrThrow(DatabaseContract.TvColumns.POSTERPATH));

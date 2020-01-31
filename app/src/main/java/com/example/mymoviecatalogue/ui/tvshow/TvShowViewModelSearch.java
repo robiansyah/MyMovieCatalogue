@@ -38,7 +38,7 @@ public class TvShowViewModelSearch extends ViewModel {
                     for (int i = 0; i < 15; i++) {
                         JSONObject tvShow = list.getJSONObject(i);
                         TvShowItems tvShowItems = new TvShowItems();
-                        tvShowItems.setIdApi(tvShow.getString("id"));
+                        tvShowItems.setIdApi(tvShow.getInt("id"));
                         tvShowItems.setName(tvShow.getString("name"));
                         tvShowItems.setPosterPath(img_url + tvShow.getString("poster_path"));
                         tvShowItems.setOverview(tvShow.getString("overview"));

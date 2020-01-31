@@ -2,6 +2,7 @@ package com.example.mymoviecatalogue.ui.tvshow;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.mymoviecatalogue.R;
-import com.example.mymoviecatalogue.db.DatabaseContract;
-import com.example.mymoviecatalogue.db.TvHelper;
+import com.example.mymoviecatalogue.ui.favorite.tvshow.MappingHelper;
 
+import static com.example.mymoviecatalogue.db.DatabaseContract.TvColumns.CONTENT_URI_TV;
 import static com.example.mymoviecatalogue.db.DatabaseContract.TvColumns.FIRSTAIRDATE;
 import static com.example.mymoviecatalogue.db.DatabaseContract.TvColumns.IDAPI;
 import static com.example.mymoviecatalogue.db.DatabaseContract.TvColumns.NAME;
@@ -29,7 +30,7 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
     public static final String EXTRA_TV = "extra_tv";
     private TvShowItems tvShow;
-    private TvHelper tvHelper;
+    private Uri uriWithId, uriWithIdApi;
 
     private String name;
     private String popularity;
@@ -38,7 +39,7 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     private String overview;
     private String poster;
     private int id;
-    private String idApi;
+    private int idApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +48,6 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
         int header = R.string.tv_show_detail_header;
         setActionBarName(header);
-
-        tvHelper = TvHelper.getInstance(getApplicationContext());
-        tvHelper.open();
 
         TextView tvName = findViewById(R.id.txt_name);
         TextView tvPopularity = findViewById(R.id.txt_popularity);
@@ -101,42 +99,36 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void add_fav(){
-        Cursor cursor = tvHelper.queryById(String.valueOf(idApi));
-        try {
-            if (cursor.moveToFirst()) {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.TvColumns._ID));
-                long result = tvHelper.deleteById(String.valueOf(id));
-                if (result > 0)
-                    Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_del_ok, Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_del_no, Toast.LENGTH_SHORT).show();
-            }else{
-                tvShow.setIdApi(idApi);
-                tvShow.setName(name);
-                tvShow.setOverview(overview);
-                tvShow.setPopularity(popularity);
-                tvShow.setPosterPath(poster);
-                tvShow.setFirstAirDate(firstAirDate);
-                tvShow.setVoteAverage(vote);
+        uriWithIdApi = Uri.parse(CONTENT_URI_TV + "/" + idApi);
+        Cursor cursor = getContentResolver().query(uriWithIdApi, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            tvShow = MappingHelper.mapCursorToObject(cursor);
+            uriWithId = Uri.parse(CONTENT_URI_TV + "/" + tvShow.getId());
+            long result = getContentResolver().delete(uriWithId, null, null);
+            if (result > 0)
+                Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_del_ok, Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_del_no, Toast.LENGTH_SHORT).show();
+        }else{
+            tvShow.setIdApi(idApi);
+            tvShow.setName(name);
+            tvShow.setOverview(overview);
+            tvShow.setPopularity(popularity);
+            tvShow.setPosterPath(poster);
+            tvShow.setFirstAirDate(firstAirDate);
+            tvShow.setVoteAverage(vote);
 
-                ContentValues values = new ContentValues();
-                values.put(IDAPI, idApi);
-                values.put(NAME, name);
-                values.put(OVERVIEW, overview);
-                values.put(POPULARITY, popularity);
-                values.put(POSTERPATH, poster);
-                values.put(FIRSTAIRDATE, firstAirDate);
-                values.put(VOTEAVERAGE, vote);
-                long result = tvHelper.insert(values);
-                if(result>0)
-                    Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_add_ok, Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_add_no, Toast.LENGTH_SHORT).show();
-            }
-        } finally {
-            cursor.close();
+            ContentValues values = new ContentValues();
+            values.put(IDAPI, idApi);
+            values.put(NAME, name);
+            values.put(OVERVIEW, overview);
+            values.put(POPULARITY, popularity);
+            values.put(POSTERPATH, poster);
+            values.put(FIRSTAIRDATE, firstAirDate);
+            values.put(VOTEAVERAGE, vote);
+            getContentResolver().insert(CONTENT_URI_TV, values);
+            Toast.makeText(TvShowDetailActivity.this, R.string.favorite_notif_add_ok, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
