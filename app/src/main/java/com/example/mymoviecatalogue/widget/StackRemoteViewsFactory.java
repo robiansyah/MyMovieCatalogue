@@ -4,28 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Binder;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.mymoviecatalogue.R;
 import com.example.mymoviecatalogue.db.DatabaseContract;
-import com.example.mymoviecatalogue.ui.favorite.movie.MappingHelper;
 import com.example.mymoviecatalogue.ui.movie.MovieItems;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private final List<Bitmap> mWidgetItems = new ArrayList<>();
     private final Context mContext;
-    private ArrayList<MovieItems> mData = new ArrayList<>();
+    private Cursor cursor;
 
     StackRemoteViewsFactory(Context context) {
         mContext = context;
@@ -33,46 +28,52 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
-        //required
+        cursor = mContext.getContentResolver().query(DatabaseContract.MovieColumns.CONTENT_URI_MOVIE, null, null, null, null);
     }
 
     @Override
     public void onDataSetChanged() {
-        Thread thread = new Thread() {
-            public void run() {
-                Cursor cursor = mContext.getContentResolver().query(DatabaseContract.MovieColumns.CONTENT_URI_MOVIE, null, null, null, null);
-                if (cursor != null) {
-                    mData = MappingHelper.mapCursorToArrayList(cursor);
-                    cursor.close();
-                }
-                if (mData != null) {
-                    for (int i =0; i<mData.size(); i++){
-                        mWidgetItems.add(getBitmapFromURL(mData.get(i).getPosterPath()));
-                    }
-                }
-            }
-        };
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
+        if (cursor != null) {
+            cursor.close();
         }
+
+        final long identifyToken = Binder.clearCallingIdentity();
+        cursor = mContext.getContentResolver().query(DatabaseContract.MovieColumns.CONTENT_URI_MOVIE, null, null, null, null);
+        Binder.restoreCallingIdentity(identifyToken);
     }
 
     @Override
     public void onDestroy() {
-        //required
+        if (cursor != null) {
+            cursor.close();
+        }
     }
 
     @Override
     public int getCount() {
-        return mWidgetItems.size();
+        if (cursor != null) {
+            return cursor.getCount();
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.item_widget);
-        rv.setImageViewBitmap(R.id.imageView, mWidgetItems.get(position));
+        MovieItems movieItems = getMoviePosition(position);
+        String urlPhoto = movieItems.getPosterPath();
+        try {
+            Bitmap bmp = Glide.with(mContext)
+                    .asBitmap()
+                    .load(urlPhoto)
+                    .apply(new RequestOptions().fitCenter())
+                    .submit()
+                    .get();
+            rv.setImageViewBitmap(R.id.imageView, bmp);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
         Bundle extras = new Bundle();
         extras.putInt(ImageFavoriteWidget.EXTRA_ITEM, position);
@@ -103,18 +104,13 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         return false;
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            // Log exception
-            return null;
+    private MovieItems getMoviePosition(int position) {
+        if (cursor.moveToPosition(position)) {
+            return new MovieItems(cursor);
+        } else {
+            throw new IllegalStateException("Error");
         }
     }
+
+
 }

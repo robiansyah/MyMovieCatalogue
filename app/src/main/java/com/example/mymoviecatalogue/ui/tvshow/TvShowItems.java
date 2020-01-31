@@ -17,7 +17,7 @@ public class TvShowItems implements Parcelable {
         }
     };
     private int id;
-    private String idApi;
+    private int idApi;
     private String name;
     private String voteAverage;
     private String overview;
@@ -27,7 +27,7 @@ public class TvShowItems implements Parcelable {
 
     protected TvShowItems(Parcel in) {
         id = in.readInt();
-        idApi = in.readString();
+        idApi = in.readInt();
         name = in.readString();
         voteAverage = in.readString();
         overview = in.readString();
@@ -40,7 +40,7 @@ public class TvShowItems implements Parcelable {
 
     }
 
-    public TvShowItems(int id, String idApi, String name, String overview, String poster, String vote, String release, String popularity) {
+    public TvShowItems(int id, int idApi, String name, String overview, String poster, String vote, String release, String popularity) {
         this.id = id;
         this.idApi = idApi;
         this.name = name;
@@ -59,11 +59,11 @@ public class TvShowItems implements Parcelable {
         this.id = id;
     }
 
-    public String getIdApi() {
+    public int getIdApi() {
         return idApi;
     }
 
-    public void setIdApi(String idApi) {
+    public void setIdApi(int idApi) {
         this.idApi = idApi;
     }
 
@@ -123,7 +123,7 @@ public class TvShowItems implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(idApi);
+        dest.writeInt(idApi);
         dest.writeString(name);
         dest.writeString(voteAverage);
         dest.writeString(overview);

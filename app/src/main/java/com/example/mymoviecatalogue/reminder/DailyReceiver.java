@@ -16,47 +16,44 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.mymoviecatalogue.MainActivity;
 import com.example.mymoviecatalogue.R;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class DailyReceiver extends BroadcastReceiver {
 
-    public static final String TYPE_REPEATING = "RepeatingAlarm";
-    public static final String EXTRA_MESSAGE = "message";
-
     private final int ID_REPEATING = 101;
-    private String TIME_FORMAT = "HH:mm";
+
+    public DailyReceiver(){
+
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String message = intent.getStringExtra(EXTRA_MESSAGE);
-
-        String title = TYPE_REPEATING;
-        int notifId = ID_REPEATING;
-
-        showAlarmNotification(context, title, message, notifId);
+                showAlarmNotification(context);
     }
 
-    private void showAlarmNotification(Context context, String title, String message, int notifId) {
+    private void showAlarmNotification(Context context) {
         String CHANNEL_ID = "Channel_1";
-        String CHANNEL_NAME = "AlarmManager channel";
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dicoding.com"));
+        String CHANNEL_NAME = "Daily channel";
+        String title = context.getString(R.string.app_name);
+        String message = context.getString(R.string.daily_reminder_message);
+        Intent intent = new Intent(context, MainActivity.class);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_tv_black_24dp)
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setSound(alarmSound);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     CHANNEL_NAME,
@@ -68,38 +65,26 @@ public class DailyReceiver extends BroadcastReceiver {
                 notificationManagerCompat.createNotificationChannel(channel);
             }
         }
+
         Notification notification = builder.build();
         if (notificationManagerCompat != null) {
-            notificationManagerCompat.notify(notifId, notification);
+            notificationManagerCompat.notify(ID_REPEATING, notification);
         }
     }
 
-    public void setRepeatingAlarm(Context context, String time, String message) {
-        if (isDateInvalid(time, TIME_FORMAT)) return;
+    public void setRepeatingAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DailyReceiver.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        String[] timeArray = time.split(":");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_REPEATING, intent, 0);
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
-        Toast.makeText(context, "Repeating alarm set up", Toast.LENGTH_SHORT).show();
-    }
-
-    public boolean isDateInvalid(String date, String format) {
-        try {
-            DateFormat df = new SimpleDateFormat(format, Locale.getDefault());
-            df.setLenient(false);
-            df.parse(date);
-            return false;
-        } catch (ParseException e) {
-            return true;
-        }
+        Toast.makeText(context, R.string.daily_reminder_set, Toast.LENGTH_SHORT).show();
     }
 
     public void cancelAlarm(Context context) {
@@ -111,7 +96,7 @@ public class DailyReceiver extends BroadcastReceiver {
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
         }
-        Toast.makeText(context, "Repeating alarm dibatalkan", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.daily_reminder_unset, Toast.LENGTH_SHORT).show();
     }
 
 }

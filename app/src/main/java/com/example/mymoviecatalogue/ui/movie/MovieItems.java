@@ -1,7 +1,10 @@
 package com.example.mymoviecatalogue.ui.movie;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.mymoviecatalogue.db.DatabaseContract;
 
 public class MovieItems implements Parcelable {
     private int id;
@@ -94,8 +97,12 @@ public class MovieItems implements Parcelable {
         dest.writeString(popularity);
     }
 
-    public MovieItems() {
+    public MovieItems(){
 
+    }
+
+    public MovieItems(Cursor cursor) {
+        this.posterPath = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.MovieColumns.POSTERPATH));
     }
 
     public MovieItems(int id, int idApi, String title, String overview, String poster, String vote, String release, String popularity) {
@@ -109,7 +116,7 @@ public class MovieItems implements Parcelable {
         this.popularity = popularity;
     }
 
-    protected MovieItems(Parcel in) {
+    public MovieItems(Parcel in) {
         id = in.readInt();
         idApi = in.readInt();
         title = in.readString();

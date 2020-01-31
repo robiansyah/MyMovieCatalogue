@@ -1,4 +1,4 @@
-package com.example.mymoviecatalogue.ui.movie;
+package com.example.mymoviecatalogue.ui.tvshow;
 
 import android.util.Log;
 
@@ -18,14 +18,15 @@ import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MovieViewModelSearch extends ViewModel {
-    private static final String API_KEY = BuildConfig.API_KEY;
-    private MutableLiveData<ArrayList<MovieItems>> listMovies = new MutableLiveData<>();
+public class TvShowViewModelSearch extends ViewModel {
 
-    public void setMovie(String query) {
+    private static final String API_KEY = BuildConfig.API_KEY;
+    private MutableLiveData<ArrayList<TvShowItems>> listTvShows = new MutableLiveData<>();
+
+    public void setTvShow(String query) {
         AsyncHttpClient client = new AsyncHttpClient();
-        final ArrayList<MovieItems> listItems = new ArrayList<>();
-        String url = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&language=en-US&query=" + query;
+        final ArrayList<TvShowItems> listItems = new ArrayList<>();
+        String url = "https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&language=en-US&query=" + query;
         final String img_url = "https://image.tmdb.org/t/p/w185";
         client.get(url, new AsyncHttpResponseHandler() {
             @Override
@@ -35,18 +36,18 @@ public class MovieViewModelSearch extends ViewModel {
                     JSONObject responseObject = new JSONObject(result);
                     JSONArray list = responseObject.getJSONArray("results");
                     for (int i = 0; i < 15; i++) {
-                        JSONObject movie = list.getJSONObject(i);
-                        MovieItems movieItems = new MovieItems();
-                        movieItems.setIdApi(movie.getInt("id"));
-                        movieItems.setTitle(movie.getString("title"));
-                        movieItems.setPosterPath(img_url + movie.getString("poster_path"));
-                        movieItems.setOverview(movie.getString("overview"));
-                        movieItems.setVoteAverage(movie.getString("vote_average"));
-                        movieItems.setReleaseDate(movie.getString("release_date"));
-                        movieItems.setPopularity(movie.getString("popularity"));
-                        listItems.add(movieItems);
+                        JSONObject tvShow = list.getJSONObject(i);
+                        TvShowItems tvShowItems = new TvShowItems();
+                        tvShowItems.setIdApi(tvShow.getInt("id"));
+                        tvShowItems.setName(tvShow.getString("name"));
+                        tvShowItems.setPosterPath(img_url + tvShow.getString("poster_path"));
+                        tvShowItems.setOverview(tvShow.getString("overview"));
+                        tvShowItems.setVoteAverage(tvShow.getString("vote_average"));
+                        tvShowItems.setFirstAirDate(tvShow.getString("first_air_date"));
+                        tvShowItems.setPopularity(tvShow.getString("popularity"));
+                        listItems.add(tvShowItems);
                     }
-                    listMovies.postValue(listItems);
+                    listTvShows.postValue(listItems);
                 } catch (Exception e) {
                     Log.d("Exception", Objects.requireNonNull(e.getMessage()));
                 }
@@ -59,7 +60,7 @@ public class MovieViewModelSearch extends ViewModel {
         });
     }
 
-    public LiveData<ArrayList<MovieItems>> getMovies() {
-        return listMovies;
+    public LiveData<ArrayList<TvShowItems>> getTvShows() {
+        return listTvShows;
     }
 }

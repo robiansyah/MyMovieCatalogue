@@ -4,12 +4,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymoviecatalogue.R;
+import com.example.mymoviecatalogue.reminder.ReminderActivity;
+import com.example.mymoviecatalogue.search.SearchResultActivity;
 
 import java.util.ArrayList;
 
@@ -84,10 +88,28 @@ public class MovieFragment extends Fragment {
         startActivity(moveMovieDetail);
     }
 
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_change_settings) {
+            Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+            startActivity(mIntent);
+        }else if(item.getItemId() == R.id.action_reminder_settings){
+            Intent mIntentReminder = new Intent(getActivity(), ReminderActivity.class);
+            startActivity(mIntentReminder);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
         if (searchManager != null) {
             SearchView searchView = (SearchView) (menu.findItem(R.id.search)).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -95,7 +117,10 @@ public class MovieFragment extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Toast.makeText(getActivity(), query, Toast.LENGTH_SHORT).show();
+                    Intent searchIntent = new Intent(getContext(), SearchResultActivity.class);
+                    searchIntent.putExtra(SearchResultActivity.EXTRA_SEARCH, query);
+                    searchIntent.setAction(SearchResultActivity.MOVIE_SEARCH);
+                    startActivity(searchIntent);
                     return true;
                 }
                 @Override
@@ -104,6 +129,7 @@ public class MovieFragment extends Fragment {
                 }
             });
         }
+
     }
 
 
